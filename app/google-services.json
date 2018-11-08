@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1043322055180",
+    "firebase_url": "https://mydemo-8dcae.firebaseio.com",
+    "project_id": "mydemo-8dcae",
+    "storage_bucket": "mydemo-8dcae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043322055180:android:4401387f14d6c9c4",
+        "android_client_info": {
+          "package_name": "prabha.mat.one.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1043322055180-88jg0o4rrkr991bet4gr5eco29hbvrn3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "prabha.mat.one.app",
+            "certificate_hash": "0699068c63391f17dc1b96e9d6cf5c09a719c4ee"
+          }
+        },
+        {
+          "client_id": "1043322055180-b5r8ec2bo53q6ovppf577sd3b201gadn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIE4jFs4pbukc49L5kZDxwlhuE_Om13II"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1043322055180-b5r8ec2bo53q6ovppf577sd3b201gadn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
