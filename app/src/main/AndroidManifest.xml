@@ -16,9 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" android:label="Login Screen" />
+        <activity android:name=".LoginActivity" android:label="Login Screen"
+                  android:parentActivityName=".WelcomeScreenActivity"/>
         <activity android:name=".MatchesActivity" android:label="Matches Screen"/>
-        <activity android:name=".CreateAccountActivity" android:label="Create Account"></activity>
+        <activity android:name=".CreateAccountActivity" android:label="Create Account"
+                  android:parentActivityName=".WelcomeScreenActivity"/>
     </application>
 
 </manifest>

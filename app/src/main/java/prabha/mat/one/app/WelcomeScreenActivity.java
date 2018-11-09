@@ -37,7 +37,6 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(WelcomeScreenActivity.this,
                                           LoginActivity.class));
-                finish();
             }
         });
 
@@ -46,7 +45,6 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(WelcomeScreenActivity.this,
                                           CreateAccountActivity.class));
-                finish();
             }
         });
 
