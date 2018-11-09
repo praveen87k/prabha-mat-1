@@ -1,5 +1,6 @@
 package prabha.mat.one.app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText emailID, password;
     private Button createAccount;
     private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +29,14 @@ public class CreateAccountActivity extends AppCompatActivity {
         initialiseVariables();
 
         firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(validate()){
+                    progressDialog.setMessage("Creating account");
+                    progressDialog.show();
                     // save values to Firebase
                     firebaseAuth.createUserWithEmailAndPassword(emailID.getText().toString().trim(),
                                     password.getText().toString().trim())
@@ -39,13 +44,17 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
+                                        progressDialog.dismiss();
                                         Toast.makeText(CreateAccountActivity.this,
-                                                "Account Created",
+                                                "Account created successfully. Please Login",
                                                 Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
+                                        startActivity(new Intent(CreateAccountActivity.this,
+                                                                  LoginActivity.class));
+                                        finish();
                                     }else {
+                                        progressDialog.dismiss();
                                         Toast.makeText(CreateAccountActivity.this,
-                                                "Account Creation Failed",
+                                                "Account creation failed",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }
