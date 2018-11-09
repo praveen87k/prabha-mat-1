@@ -8,17 +8,23 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class WelcomeScreenActivity extends AppCompatActivity {
 
     private Button LoginMenu;
     private Button CreateAccountMenu;
+    private FirebaseAuth firebaseAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_welcome_screen);
         getSupportActionBar().hide();
@@ -29,17 +35,28 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         LoginMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WelcomeScreenActivity.this, LoginActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(WelcomeScreenActivity.this,
+                                          LoginActivity.class));
+                finish();
             }
         });
 
         CreateAccountMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WelcomeScreenActivity.this, CreateAccountActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(WelcomeScreenActivity.this,
+                                          CreateAccountActivity.class));
+                finish();
             }
         });
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if(firebaseUser != null){
+            startActivity(new Intent(WelcomeScreenActivity.this,
+                                      MatchesActivity.class));
+            finish();
+        }
     }
 }
