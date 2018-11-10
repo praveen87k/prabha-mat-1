@@ -91,7 +91,7 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
         if (id == R.id.my_profile) {
-            return true;
+            startActivity(new Intent(HomePageActivity.this, MyProfileActivity.class));
         }
 
         if (id == R.id.logout) {
