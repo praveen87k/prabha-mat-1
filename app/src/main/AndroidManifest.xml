@@ -16,11 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" android:label="Login Screen"
-                  android:parentActivityName=".WelcomeScreenActivity"/>
-        <activity android:name=".MatchesActivity" android:label="Matches Screen"/>
-        <activity android:name=".CreateAccountActivity" android:label="Create Account"
-                  android:parentActivityName=".WelcomeScreenActivity"/>
+        <activity
+            android:name=".LoginActivity"
+            android:label="Login Screen"
+            android:parentActivityName=".WelcomeScreenActivity" />
+        <activity
+            android:name=".CreateAccountActivity"
+            android:label="Create Account"
+            android:parentActivityName=".WelcomeScreenActivity" />
+        <activity
+            android:name=".HomePageActivity"
+            android:label="@string/title_activity_home_page"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
