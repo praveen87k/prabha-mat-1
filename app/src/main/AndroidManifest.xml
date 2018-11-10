@@ -27,7 +27,11 @@
         <activity
             android:name=".HomePageActivity"
             android:label="@string/title_activity_home_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MyProfileActivity"
+            android:label="My Profile"
+            android:parentActivityName=".HomePageActivity"/>
     </application>
 
 </manifest>
