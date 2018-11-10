@@ -57,9 +57,10 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this,
                                         "Login successful",
                                         Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this,
-                                        HomePageActivity.class));
-                                finish();
+                                Intent intent = new Intent(LoginActivity.this,
+                                                             HomePageActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
                             }else {
                                 progressDialog.dismiss();
                                 Toast.makeText(LoginActivity.this,
