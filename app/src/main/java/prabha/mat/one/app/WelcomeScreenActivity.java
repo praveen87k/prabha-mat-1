@@ -53,7 +53,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         if(firebaseUser != null){
             startActivity(new Intent(WelcomeScreenActivity.this,
-                                      MatchesActivity.class));
+                                      HomePageActivity.class));
             finish();
         }
     }
