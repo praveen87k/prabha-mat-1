@@ -31,7 +31,11 @@
         <activity
             android:name=".MyProfileActivity"
             android:label="My Profile"
-            android:parentActivityName=".HomePageActivity"/>
+            android:parentActivityName=".HomePageActivity" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:label="Forgot Password"
+            android:parentActivityName=".LoginActivity"/>
     </application>
 
 </manifest>
