@@ -18,7 +18,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="Login Screen"
+            android:label="PunarVivaha"
             android:parentActivityName=".WelcomeScreenActivity" />
         <activity
             android:name=".CreateAccountActivity"
