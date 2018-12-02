@@ -90,9 +90,9 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void sendUserData(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
+        DatabaseReference databaseReference = firebaseDatabase.getReference();
         UserProfile userProfile = new UserProfile(age.getText().toString().trim(),
                                                   name.getText().toString().trim());
-        databaseReference.setValue(userProfile);
+        databaseReference.child("users").child(firebaseAuth.getUid()).setValue(userProfile);
     }
 }
