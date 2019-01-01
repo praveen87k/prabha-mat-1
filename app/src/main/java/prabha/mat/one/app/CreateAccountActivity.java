@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CreateAccountActivity extends AppCompatActivity {
 
     private EditText emailID, password, name, age;
+    private RadioGroup gender;
     private Button createAccount;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
@@ -74,6 +78,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         createAccount = (Button) findViewById(R.id.btnCreateAccount);
         name = (EditText) findViewById(R.id.etName);
         age = (EditText) findViewById(R.id.etAge);
+        gender = (RadioGroup) findViewById(R.id.rgGender);
     }
 
     private boolean validate(){
@@ -88,11 +93,31 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
+    private String getGender(){
+        int selectedRadioButtonID = gender.getCheckedRadioButtonId();
+        // If nothing is selected from Radio Group, then it return -1
+        if (selectedRadioButtonID != -1) {
+            RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioButtonID);
+            String selectedRadioButtonText = selectedRadioButton.getText().toString();
+            Log.i("selectedRadioButtonText", " : " + selectedRadioButtonText);
+            return selectedRadioButtonText;
+        }else {
+            return "Male";
+        }
+    }
+
     private void sendUserData(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference();
         UserProfile userProfile = new UserProfile(age.getText().toString().trim(),
-                                                  name.getText().toString().trim());
-        databaseReference.child("users").child(firebaseAuth.getUid()).setValue(userProfile);
+                                                  name.getText().toString().trim(),
+                                                  this.getGender());
+        if(this.getGender().equalsIgnoreCase("Male")){
+            databaseReference.child("Users").child("Male")
+                    .child(firebaseAuth.getUid()).setValue(userProfile);
+        }else {
+            databaseReference.child("Users").child("Female")
+                    .child(firebaseAuth.getUid()).setValue(userProfile);
+        }
     }
 }
