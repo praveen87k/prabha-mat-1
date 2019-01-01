@@ -3,14 +3,16 @@ package prabha.mat.one.app;
 public class UserProfile {
     private String userAge;
     private String userName;
+    private String userGender;
 
     public UserProfile(){
 
     }
 
-    public UserProfile(String userAge, String userName) {
+    public UserProfile(String userAge, String userName, String userGender) {
         this.userAge = userAge;
         this.userName = userName;
+        this.userGender = userGender;
     }
 
     public String getUserAge() {
@@ -27,5 +29,13 @@ public class UserProfile {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserGender() {
+        return userGender;
+    }
+
+    public void setUserGender(String userGender) {
+        this.userGender = userGender;
     }
 }
