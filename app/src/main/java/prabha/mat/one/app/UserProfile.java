@@ -4,15 +4,25 @@ public class UserProfile {
     private String userAge;
     private String userName;
     private String userGender;
+    private String profileImageUrl;
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 
     public UserProfile(){
 
     }
 
-    public UserProfile(String userAge, String userName, String userGender) {
+    public UserProfile(String userAge, String userName, String userGender, String profileImageUrl) {
         this.userAge = userAge;
         this.userName = userName;
         this.userGender = userGender;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public String getUserAge() {

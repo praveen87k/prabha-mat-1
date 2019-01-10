@@ -111,13 +111,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         DatabaseReference databaseReference = firebaseDatabase.getReference();
         UserProfile userProfile = new UserProfile(age.getText().toString().trim(),
                                                   name.getText().toString().trim(),
-                                                  this.getGender());
-        if(this.getGender().equalsIgnoreCase("Male")){
-            databaseReference.child("Users").child("Male")
-                    .child(firebaseAuth.getUid()).setValue(userProfile);
-        }else {
-            databaseReference.child("Users").child("Female")
-                    .child(firebaseAuth.getUid()).setValue(userProfile);
-        }
+                                                  this.getGender(),
+                                                  "default");
+        databaseReference.child("Users").child(firebaseAuth.getUid()).setValue(userProfile);
     }
 }
