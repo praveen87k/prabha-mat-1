@@ -2,93 +2,204 @@ package prabha.mat.one.app;
 
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
+import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tab1Matches extends Fragment{
 
-    private FirebaseDatabase firebaseDatabase;
     private ProgressDialog progressDialog;
-    private ArrayList<String> userNames = new ArrayList<String>();
-    private ArrayList<String> userAges = new ArrayList<String>();
+    private arrayAdapter arrayAdapter;
+
+    private String currentUserId;
+    private DatabaseReference databaseReference;
+
+    List<Cards> rowItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab1_matches, container, false);
-        firebaseDatabase = FirebaseDatabase.getInstance();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading");
         progressDialog.show();
 
-        DatabaseReference databaseReference = firebaseDatabase.getReference().child("users");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        checkUserGender();
+
+        rowItems = new ArrayList<Cards>();
+        arrayAdapter = new arrayAdapter(getActivity(), R.layout.item, rowItems);
+
+
+        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) rootView.findViewById(R.id.frame);
+
+        flingContainer.setAdapter(arrayAdapter);
+        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userNames.clear();
-                userAges.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String userName = ds.child("userName").getValue(String.class);
-                    userNames.add(userName);
-                    String userAge = ds.child("userAge").getValue(String.class);
-                    userAges.add(userAge);
-                }
-                ListView listView = (ListView)rootView.findViewById(R.id.lvUsers);
-                CustomAdapter customAdapter = new CustomAdapter();
-                listView.setAdapter(customAdapter);
-                progressDialog.dismiss();
+            public void removeFirstObjectInAdapter() {
+                // this is the simplest way to delete an object from the Adapter (/AdapterView)
+                Log.d("LIST", "removed object!");
+                rowItems.remove(0);
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                progressDialog.dismiss();
-//                commenting as an error is thrown during logout
-//                Toast.makeText(getActivity(), databaseError.getCode(), Toast.LENGTH_SHORT).show();
+            public void onLeftCardExit(Object dataObject) {
+                //Do something on the left!
+                //You also have access to the original object.
+                //If you want to use it just cast it (String) dataObject
+                Cards cards = (Cards) dataObject;
+                String userID = cards.getUserId();
+                databaseReference.child(userID).child("connections")
+                                 .child("rejectedBy").child(currentUserId).setValue(true);
+                Toast.makeText(getActivity(), "Left", Toast.LENGTH_SHORT).show();
             }
 
-            class CustomAdapter extends BaseAdapter{
+            @Override
+            public void onRightCardExit(Object dataObject) {
+                Cards cards = (Cards) dataObject;
+                String userID = cards.getUserId();
+                databaseReference.child(userID).child("connections")
+                        .child("acceptedBy").child(currentUserId).setValue(true);
+                isConnectionMatch(userID);
+                Toast.makeText(getActivity(), "Right", Toast.LENGTH_SHORT).show();
+            }
 
-                @Override
-                public int getCount() {
-                    return userNames.size();
-                }
+            @Override
+            public void onAdapterAboutToEmpty(int itemsInAdapter) {
+                // Ask for more data here
+                // al.add("XML ".concat(String.valueOf(i)));
+                // arrayAdapter.notifyDataSetChanged();
+                // Log.d("LIST", "notified");
+            }
 
-                @Override
-                public Object getItem(int position) {
-                    return null;
-                }
+            @Override
+            public void onScroll(float scrollProgressPercent) {
+            }
+        });
 
-                @Override
-                public long getItemId(int position) {
-                    return 0;
-                }
 
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    convertView = getLayoutInflater().inflate(R.layout.matching_user, null);
-                    TextView userName = (TextView)convertView.findViewById(R.id.tvUserName);
-                    TextView userAge = (TextView)convertView.findViewById(R.id.tvUserAge);
-                    userName.setText(userNames.get(position));
-                    userAge.setText(userAges.get(position));
-                    return convertView;
-                }
+        // Optionally add an OnItemClickListener
+        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClicked(int itemPosition, Object dataObject) {
+                Toast.makeText(getActivity(), "Item Clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
         return rootView;
+    }
+
+    private String userGender;
+    private String userOppositeGender;
+
+    public void checkUserGender(){
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUserId = currentUser.getUid();
+        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference()
+                                                          .child("Users").child(currentUserId);
+        userDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    if(dataSnapshot.child("userGender").getValue() != null){
+                        userGender = dataSnapshot.child("userGender").getValue().toString();
+                        if(userGender.equals("Male")){
+                            userOppositeGender = "Female";
+                        }else {
+                            userOppositeGender = "Male";
+                        }
+                        getMatches();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    public void getMatches(){
+        DatabaseReference matchesDb = FirebaseDatabase.getInstance().getReference().child("Users");
+        matchesDb.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(dataSnapshot.exists()
+                        && dataSnapshot.child("userGender").getValue().toString().equals(userOppositeGender)
+                        && !dataSnapshot.child("connections")
+                                        .child("rejectedBy").hasChild(currentUserId)
+                        && !dataSnapshot.child("connections")
+                                        .child("acceptedBy").hasChild(currentUserId)){
+                    String profileImageUrl = "default";
+                    if (!dataSnapshot.child("profileImageUrl").getValue().equals("default")){
+                        profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
+                    }
+                    Cards item = new Cards(dataSnapshot.getKey(),
+                                           dataSnapshot.child("userName").getValue().toString(),
+                                           profileImageUrl);
+                    rowItems.add(item);
+                    arrayAdapter.notifyDataSetChanged();
+                }
+                progressDialog.dismiss();
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void isConnectionMatch(String userId){
+        DatabaseReference currentUserConnectionsDb =
+                databaseReference.child(currentUserId).child("connections")
+                                 .child("acceptedBy").child(userId);
+        currentUserConnectionsDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Toast.makeText(getActivity(), "New Connection", Toast.LENGTH_SHORT).show();
+
+                    String key = FirebaseDatabase.getInstance().getReference().child("Chat")
+                                                                         .push().getKey();
+
+                    databaseReference.child(dataSnapshot.getKey())
+                            .child("connections").child("matches").child(currentUserId)
+                            .child("ChatId").setValue(key);
+                    databaseReference.child(currentUserId).child("connections")
+                            .child("matches").child(dataSnapshot.getKey())
+                            .child("ChatId").setValue(key);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }
