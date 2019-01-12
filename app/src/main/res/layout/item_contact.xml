@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -9,7 +8,7 @@
         android:layout_width="100sp"
         android:layout_height="100sp"
         android:src="@drawable/default_user_pic"
-        android:id="@+id/MatchImage"/>
+        android:id="@+id/ContactImage"/>
     <LinearLayout
         android:paddingLeft="20sp"
         android:layout_width="match_parent"
@@ -20,21 +19,28 @@
             android:paddingBottom="10sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/MatchName"
+            android:id="@+id/ContactName"
             android:text="Matches's Name"
             android:layout_gravity="center"/>
         <TextView
             android:paddingBottom="10sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/MatchAge"
+            android:id="@+id/ContactAge"
             android:text="Matches's Age"
+            android:layout_gravity="center"/>
+        <TextView
+            android:paddingBottom="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ContactRequestType"
+            android:text="Request Type"
             android:layout_gravity="center"/>
         <TextView
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/Matchid"
+            android:id="@+id/ContactId"
             android:text="Matches's ID"
             android:layout_gravity="center"/>
     </LinearLayout>
