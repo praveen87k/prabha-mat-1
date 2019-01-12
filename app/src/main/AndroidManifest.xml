@@ -43,7 +43,13 @@
             android:name=".ProfileDetailsActivity"
             android:label="Profile Details"
             android:parentActivityName=".HomePageActivity" />
-        <activity android:name=".contacts.ContactDetailsActivity"></activity>
+        <activity android:name=".contacts.ContactDetailsActivity" />
+        <activity android:name=".contacts.ContactDetailsActivity1" />
+        <activity android:name=".contacts.ContactDetailsActivity2" />
+        <activity android:name=".contacts.ContactDetailsActivity3" />
+        <activity android:name=".contacts.ContactDetailsActivity4" />
+        <activity android:name=".contacts.ContactDetailsActivity5" />
+        <activity android:name=".contacts.ContactDetailsActivity6"></activity>
     </application>
 
 </manifest>
