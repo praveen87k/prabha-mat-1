@@ -120,11 +120,15 @@ public class Tab3Contacts extends Fragment {
                     String userAge = "";
                     String profileImageUrl = "";
                     String requestType = "";
+                    String phoneNumber = "";
                     if(dataSnapshot.child("userName").getValue() != null){
                         userName = dataSnapshot.child("userName").getValue().toString();
                     }
                     if(dataSnapshot.child("userAge").getValue() != null){
                         userAge = dataSnapshot.child("userAge").getValue().toString();
+                    }
+                    if(dataSnapshot.child("userPhone").getValue() != null){
+                        phoneNumber = dataSnapshot.child("userPhone").getValue().toString();
                     }
                     if(dataSnapshot.child("profileImageUrl").getValue() != null){
                         profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
@@ -143,7 +147,7 @@ public class Tab3Contacts extends Fragment {
                         requestType = "Contact Request sent";
                     }
                     ContactsObject obj = new ContactsObject(userId, userName, userAge,
-                                                                 profileImageUrl, requestType);
+                                                      profileImageUrl, requestType, phoneNumber);
                     resultsMatches.add(obj);
                     mMatchesAdapter.notifyDataSetChanged();
                 }

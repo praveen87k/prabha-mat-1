@@ -43,5 +43,12 @@
             android:id="@+id/ContactId"
             android:text="Matches's ID"
             android:layout_gravity="center"/>
+        <TextView
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ContactPhoneNum"
+            android:text="Matches's Phone"
+            android:layout_gravity="center"/>
     </LinearLayout>
 </LinearLayout>

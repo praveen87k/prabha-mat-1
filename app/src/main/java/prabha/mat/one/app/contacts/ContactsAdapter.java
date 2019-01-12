@@ -40,6 +40,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsViewHolder>  {
     @Override
     public void onBindViewHolder(@NonNull ContactsViewHolder holder, int position) {
         holder.mMatchId.setText(matchesList.get(position).getUserId());
+        holder.mPhoneNum.setText(matchesList.get(position).getUserPhoneNumber());
         holder.mMatchName.setText(matchesList.get(position).getUserName());
         holder.mMatchAge.setText(matchesList.get(position).getUserAge());
         holder.mRequestType.setText(matchesList.get(position).getRequestType());
