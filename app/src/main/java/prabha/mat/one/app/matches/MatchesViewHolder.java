@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import prabha.mat.one.app.ProfileDetailsActivity;
 import prabha.mat.one.app.R;
-import prabha.mat.one.app.chat.ChatActivity;
 
 public class MatchesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public TextView mMatchId, mMatchName;
@@ -25,7 +25,7 @@ public class MatchesViewHolder extends RecyclerView.ViewHolder implements View.O
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(view.getContext(), ChatActivity.class);
+        Intent intent = new Intent(view.getContext(), ProfileDetailsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("matchId", mMatchId.getText().toString());
         intent.putExtras(bundle);

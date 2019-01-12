@@ -70,7 +70,7 @@ public class Tab1Matches extends Fragment{
                 String userID = cards.getUserId();
                 databaseReference.child(userID).child("connections")
                                  .child("rejectedBy").child(currentUserId).setValue(true);
-                Toast.makeText(getActivity(), "Left", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Rejected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -79,8 +79,10 @@ public class Tab1Matches extends Fragment{
                 String userID = cards.getUserId();
                 databaseReference.child(userID).child("connections")
                         .child("acceptedBy").child(currentUserId).setValue(true);
+                databaseReference.child(currentUserId).child("connections")
+                        .child("shortListed").child(userID).setValue(true);
                 isConnectionMatch(userID);
-                Toast.makeText(getActivity(), "Right", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Shortlisted", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -101,7 +103,17 @@ public class Tab1Matches extends Fragment{
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(getActivity(), "Item Clicked", Toast.LENGTH_SHORT).show();
+                // Don't do this, as this would result in contacting the profile without
+                // shortlisting and post this profile details of the same can't be viewed.
+//                Cards cards = (Cards) dataObject;
+//                String userID = cards.getUserId();
+//                Intent intent = new Intent(getActivity(), ProfileDetailsActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("matchId", userID);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+                Toast.makeText(getActivity(), "Swipe right to Shortlist.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Swipe left to Reject.", Toast.LENGTH_SHORT).show();
             }
         });
 

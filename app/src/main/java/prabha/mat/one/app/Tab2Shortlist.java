@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class Tab2Shortlist extends Fragment {
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_shortList);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
         mMatchesLayoutManager = new LinearLayoutManager(getActivity());
@@ -50,13 +51,27 @@ public class Tab2Shortlist extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()) { // fragment is visible and have created
+            loadData();
+        }
+    }
+
+    public void loadData(){
+        // data for fragment when it visible here
+        getUserMatchId();
+    }
+
     private void getUserMatchId() {
         DatabaseReference matchDb = FirebaseDatabase.getInstance().getReference().child("Users")
-                                    .child(currentUserId).child("connections").child("matches");
+                                    .child(currentUserId).child("connections").child("shortListed");
         matchDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    resultsMatches.clear();
                     for(DataSnapshot match : dataSnapshot.getChildren()){
                         fetchMatchInformation(match.getKey());
                     }

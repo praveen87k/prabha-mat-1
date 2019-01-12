@@ -38,7 +38,12 @@
             android:name=".ForgotPasswordActivity"
             android:label="Forgot Password"
             android:parentActivityName=".LoginActivity" />
-        <activity android:name=".chat.ChatActivity"></activity>
+        <activity android:name=".chat.ChatActivity" />
+        <activity
+            android:name=".ProfileDetailsActivity"
+            android:label="Profile Details"
+            android:parentActivityName=".HomePageActivity" />
+        <activity android:name=".contacts.ContactDetailsActivity"></activity>
     </application>
 
 </manifest>
