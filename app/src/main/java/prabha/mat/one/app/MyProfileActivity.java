@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -41,7 +42,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private Button btnUpdateProfile;
     private EditText etUserName, etPhoneNumber;
     private ImageView ivProfilePic;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog, uploadProgress;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference userDbRef;
@@ -96,6 +97,10 @@ public class MyProfileActivity extends AppCompatActivity {
         userDbRef.updateChildren(userInfo);
 
         if(resultURI != null){
+            uploadProgress = new ProgressDialog(this);
+            uploadProgress.setMessage("Uploading");
+            uploadProgress.show();
+
             StorageReference filePath = FirebaseStorage.getInstance().getReference()
                                           .child("ProfilePics").child(userId);
             Bitmap bitmap = null;
@@ -113,7 +118,9 @@ public class MyProfileActivity extends AppCompatActivity {
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    finish();
+                    uploadProgress.dismiss();
+                    Toast.makeText(MyProfileActivity.this,
+                            "Profile update failed", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -130,10 +137,14 @@ public class MyProfileActivity extends AppCompatActivity {
                             userDbRef.updateChildren(userInfo);
                         }
                     });
+                    uploadProgress.dismiss();
+                    Toast.makeText(MyProfileActivity.this,
+                            "Profile updated", Toast.LENGTH_SHORT).show();
                 }
             });
         }else {
-            finish();
+            Toast.makeText(MyProfileActivity.this,
+                    "Profile updated", Toast.LENGTH_SHORT).show();
         }
     }
 
