@@ -113,7 +113,7 @@ public class Tab1Matches extends Fragment{
 //                intent.putExtras(bundle);
 //                startActivity(intent);
                 Toast.makeText(getActivity(), "Swipe right to Shortlist.", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), "Swipe left to Reject.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Swipe left to Reject.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -196,7 +196,7 @@ public class Tab1Matches extends Fragment{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Toast.makeText(getActivity(), "New Connection", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "New Connection", Toast.LENGTH_SHORT).show();
 
                     String key = FirebaseDatabase.getInstance().getReference().child("Chat")
                                                                          .push().getKey();
