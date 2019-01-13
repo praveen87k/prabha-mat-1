@@ -92,15 +92,24 @@ public class Tab2Shortlist extends Fragment {
                 if(dataSnapshot.exists()){
                     String userId = dataSnapshot.getKey();
                     String userName = "";
+                    String userAge = "";
+                    String userLocation = "";
                     String profileImageUrl = "";
                     if(dataSnapshot.child("userName").getValue() != null){
                         userName = dataSnapshot.child("userName").getValue().toString();
+                    }
+                    if(dataSnapshot.child("userAge").getValue() != null){
+                        userAge = dataSnapshot.child("userAge").getValue().toString();
+                    }
+                    if(dataSnapshot.child("userLocation").getValue() != null){
+                        userLocation = dataSnapshot.child("userLocation").getValue().toString();
                     }
                     if(dataSnapshot.child("profileImageUrl").getValue() != null){
                         profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
                     }
 
-                    MatchesObject obj = new MatchesObject(userId, userName, profileImageUrl);
+                    MatchesObject obj = new MatchesObject(userId, userName, profileImageUrl,
+                                                             userAge, userLocation);
                     resultsMatches.add(obj);
                     mMatchesAdapter.notifyDataSetChanged();
                 }

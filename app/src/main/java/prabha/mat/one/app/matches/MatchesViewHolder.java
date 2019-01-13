@@ -12,7 +12,7 @@ import prabha.mat.one.app.ProfileDetailsActivity;
 import prabha.mat.one.app.R;
 
 public class MatchesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    public TextView mMatchId, mMatchName;
+    public TextView mMatchId, mMatchName, mMatchAge, mMatchLocation;
     public ImageView mMatchImage;
 
     public MatchesViewHolder(@NonNull View itemView) {
@@ -20,6 +20,8 @@ public class MatchesViewHolder extends RecyclerView.ViewHolder implements View.O
         itemView.setOnClickListener(this);
         mMatchId = (TextView) itemView.findViewById(R.id.Matchid);
         mMatchName = (TextView) itemView.findViewById(R.id.MatchName);
+        mMatchAge = (TextView) itemView.findViewById(R.id.MatchAge);
+        mMatchLocation = (TextView) itemView.findViewById(R.id.MatchLoc);
         mMatchImage = (ImageView) itemView.findViewById(R.id.MatchImage);
     }
 

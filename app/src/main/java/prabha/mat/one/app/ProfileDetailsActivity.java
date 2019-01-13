@@ -29,14 +29,14 @@ public class ProfileDetailsActivity extends AppCompatActivity {
     private String matchId;
 
     private Button btnContactProfile;
-    private TextView etUserName, etPhoneNumber;
+    private TextView etUserName, etUserAge, etUserLocation;
     private ImageView ivProfilePic;
     private ProgressDialog progressDialog;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference userDbRef, currentUserDbRef;
 
-    private String currentUserId, name, phone, profilePicURL;
+    private String currentUserId, name, age, location, profilePicURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,8 @@ public class ProfileDetailsActivity extends AppCompatActivity {
         matchId = getIntent().getExtras().getString("matchId");
 
         etUserName = (TextView) findViewById(R.id.profileName_details);
-        etPhoneNumber = (TextView) findViewById(R.id.profilePhone_details);
+        etUserAge = (TextView) findViewById(R.id.profileAge_details);
+        etUserLocation = (TextView) findViewById(R.id.profileLocation_details);
         ivProfilePic = (ImageView) findViewById(R.id.profilePic_details);
         btnContactProfile = (Button) findViewById(R.id.contactProfileBtn);
 
@@ -86,9 +87,13 @@ public class ProfileDetailsActivity extends AppCompatActivity {
                         name = map.get("userName").toString();
                         etUserName.setText(name);
                     }
-                    if(map.get("userPhone")!=null){
-                        phone = map.get("userPhone").toString();
-                        etPhoneNumber.setText(phone);
+                    if(map.get("userAge")!=null){
+                        age = map.get("userAge").toString();
+                        etUserAge.setText(age);
+                    }
+                    if(map.get("userLocation")!=null){
+                        location = map.get("userLocation").toString();
+                        etUserLocation.setText(location);
                     }
                     Glide.clear(ivProfilePic);
                     if(map.get("profileImageUrl")!=null){

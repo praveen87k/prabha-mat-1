@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
-    private EditText emailID, password, name, age;
+    private EditText emailID, password, name, age, location, phoneNum;
     private RadioGroup gender;
     private Button createAccount;
     private FirebaseAuth firebaseAuth;
@@ -78,6 +78,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         createAccount = (Button) findViewById(R.id.btnCreateAccount);
         name = (EditText) findViewById(R.id.etName);
         age = (EditText) findViewById(R.id.etAge);
+        location = (EditText) findViewById(R.id.etLocation);
+        phoneNum = (EditText) findViewById(R.id.etPhone);
         gender = (RadioGroup) findViewById(R.id.rgGender);
     }
 
@@ -85,12 +87,52 @@ public class CreateAccountActivity extends AppCompatActivity {
         if(emailID.getText().toString().isEmpty()
                 || password.getText().toString().isEmpty()
                 || age.getText().toString().isEmpty()
-                || name.getText().toString().isEmpty()){
-            Toast.makeText(this, "Fill all the fields", Toast.LENGTH_SHORT).show();
+                || name.getText().toString().isEmpty()
+                || location.getText().toString().isEmpty()
+                || phoneNum.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return false;
-        }else {
+        }else if(emailValidationFailed()){
+            Toast.makeText(this, "Please fill valid Email Id", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(password.getText().toString().length() < 8){
+            Toast.makeText(this, "Password should have at least 8 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(Integer.parseInt(age.getText().toString()) < 21
+                                       && getGender().equals("Male")){
+            Toast.makeText(this, "You should be at least 21 years old", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(Integer.parseInt(age.getText().toString()) < 18){
+            Toast.makeText(this, "You should be at least 18 years old", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(Integer.parseInt(age.getText().toString()) > 90){
+            Toast.makeText(this, "Please enter valid age", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(phoneValidationFailed()){
+            Toast.makeText(this, "Please enter valid phone number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else {
             return true;
         }
+    }
+
+    private boolean phoneValidationFailed() {
+        if(android.util.Patterns.PHONE.matcher(phoneNum.getText().toString()).matches()
+                && phoneNum.getText().toString().length() > 9
+                && phoneNum.getText().toString().length() < 13){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean emailValidationFailed() {
+        String email = emailID.getText().toString().trim();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if (email.matches(emailPattern)){
+            return false;
+        }
+        return true;
     }
 
     private String getGender(){
@@ -112,7 +154,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         UserProfile userProfile = new UserProfile(age.getText().toString().trim(),
                                                   name.getText().toString().trim(),
                                                   this.getGender(),
-                                                  "default");
+                                                  "default",
+                                                  phoneNum.getText().toString().trim(),
+                                                  location.getText().toString().trim());
         databaseReference.child("Users").child(firebaseAuth.getUid()).setValue(userProfile);
     }
 }
