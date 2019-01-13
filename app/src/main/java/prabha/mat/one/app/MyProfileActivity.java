@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -40,14 +41,15 @@ import java.util.Map;
 public class MyProfileActivity extends AppCompatActivity {
 
     private Button btnUpdateProfile;
-    private EditText etUserName, etPhoneNumber;
+    private EditText etUserName, etPhoneNumber, etUserAge, etUserLocation;
+    private TextView tvGender;
     private ImageView ivProfilePic;
     private ProgressDialog progressDialog, uploadProgress;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference userDbRef;
 
-    private String userId, name, phone, profilePicURL;
+    private String userId, name, age, location, gender, phone, profilePicURL;
     private Uri resultURI;
 
     @Override
@@ -57,6 +59,9 @@ public class MyProfileActivity extends AppCompatActivity {
 
         etUserName = (EditText) findViewById(R.id.profileName);
         etPhoneNumber = (EditText) findViewById(R.id.profilePhone);
+        etUserAge = (EditText) findViewById(R.id.profileAge);
+        etUserLocation = (EditText) findViewById(R.id.profileLocation);
+        tvGender = (TextView) findViewById(R.id.profileGender);
         ivProfilePic = (ImageView) findViewById(R.id.profilePic);
         btnUpdateProfile = (Button) findViewById(R.id.updateProfile);
 
@@ -90,9 +95,17 @@ public class MyProfileActivity extends AppCompatActivity {
     private void saveUserInfo(){
         name = etUserName.getText().toString();
         phone = etPhoneNumber.getText().toString();
+        age = etUserAge.getText().toString();
+        location = etUserLocation.getText().toString();
+
+        if(!validate()){
+            return;
+        }
 
         Map userInfo = new HashMap();
         userInfo.put("userName", name);
+        userInfo.put("userAge", age);
+        userInfo.put("userLocation", location);
         userInfo.put("userPhone", phone);
         userDbRef.updateChildren(userInfo);
 
@@ -148,6 +161,41 @@ public class MyProfileActivity extends AppCompatActivity {
         }
     }
 
+    private boolean validate(){
+        if(phone.isEmpty()
+                || name.isEmpty()
+                || age.isEmpty()
+                || location.isEmpty()){
+            Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(Integer.parseInt(age) < 21
+                && gender.equals("Male")){
+            Toast.makeText(this, "You should be at least 21 years old", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(Integer.parseInt(age) < 18){
+            Toast.makeText(this, "You should be at least 18 years old", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(Integer.parseInt(age) > 90){
+            Toast.makeText(this, "Please enter valid age", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(phoneValidationFailed()){
+            Toast.makeText(this, "Please enter valid phone number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    private boolean phoneValidationFailed() {
+        if(android.util.Patterns.PHONE.matcher(phone).matches()
+                && phone.length() > 9
+                && phone.length() < 13){
+            return false;
+        }
+        return true;
+    }
+
     private void getUserInfo(){
         userDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -157,6 +205,18 @@ public class MyProfileActivity extends AppCompatActivity {
                     if(map.get("userName")!=null){
                         name = map.get("userName").toString();
                         etUserName.setText(name);
+                    }
+                    if(map.get("userAge")!=null){
+                        age = map.get("userAge").toString();
+                        etUserAge.setText(age);
+                    }
+                    if(map.get("userLocation")!=null){
+                        location = map.get("userLocation").toString();
+                        etUserLocation.setText(location);
+                    }
+                    if(map.get("userGender")!=null){
+                        gender = map.get("userGender").toString();
+                        tvGender.setText(gender);
                     }
                     if(map.get("userPhone")!=null){
                         phone = map.get("userPhone").toString();
